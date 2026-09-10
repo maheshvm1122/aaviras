@@ -1,0 +1,3 @@
+import Link from 'next/link';
+import { Product } from '@/types/product';
+export function ProductCard({p}:{p:Product}){return <article className="product-card"><Link href={`/product/${p.slug}`} className="product-media-link"><div className="product-media"><img src={p.image} alt={p.name} loading="lazy"/><div className="wishlist">♡</div><div className="card-reveal"><span>View details</span><span>3D ↗</span></div></div></Link><div className="product-copy"><p className="product-kicker">{p.collection}</p><h3>{p.name}</h3><div className="price-line"><strong>₹{p.price.toLocaleString('en-IN')}</strong>{p.compareAtPrice&&<del>₹{p.compareAtPrice.toLocaleString('en-IN')}</del>}</div></div></article>}

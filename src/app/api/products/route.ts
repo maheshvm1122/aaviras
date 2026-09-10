@@ -1,0 +1,2 @@
+import { NextResponse } from 'next/server'; import { products } from '@/data/products'; import { connectDB } from '@/lib/mongodb'; import { ProductModel } from '@/models/Product';
+export async function GET(){try{if(process.env.MONGODB_URI){await connectDB(); const db=await ProductModel.find().lean(); if(db.length)return NextResponse.json(db);} }catch(e){console.error(e)} return NextResponse.json(products);}

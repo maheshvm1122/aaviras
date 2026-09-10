@@ -1,0 +1,13 @@
+'use client';
+import Link from 'next/link';
+import { useCartStore } from '@/store/cartStore';
+
+export default function Cart(){
+ const {items,removeItem,setQuantity}=useCartStore();
+ const subtotal=items.reduce((a,x)=>a+x.product.price*x.quantity,0); const shipping=subtotal===0?0:subtotal>=2999?0:299; const total=subtotal+shipping;
+ return <main className="cart-page"><div className="cart-head"><span className="eyebrow">YOUR AAVIRA BAG</span><h1>Your chosen drapes.</h1><p>Review your selection before it leaves the atelier.</p></div>
+ {items.length===0?<section className="empty-cart"><div className="empty-orb">✦</div><span className="eyebrow">THE BAG IS QUIET</span><h2>Something beautiful<br/>is waiting.</h2><p>Explore the latest silk, pattu and festive edits and bring your favourite home.</p><Link href="/shop" className="luxury-cta">Explore the collection <span>↗</span></Link></section>:
+ <section className="cart-layout"><div className="cart-items">{items.map(i=><article className="cart-item" key={i.product.id+i.color}><img src={i.product.image} alt={i.product.name}/><div className="cart-item-main"><div className="cart-item-title"><div><span className="eyebrow">{i.product.category}</span><h2>{i.product.name}</h2><p>{i.color} · {i.product.fabric}</p></div><strong>₹{(i.product.price*i.quantity).toLocaleString('en-IN')}</strong></div><p className="cart-description">{i.product.description}</p><div className="cart-item-actions"><div className="quantity"><button onClick={()=>setQuantity(i.product.id,i.color,i.quantity-1)}>−</button><span>{i.quantity}</span><button onClick={()=>setQuantity(i.product.id,i.color,i.quantity+1)}>+</button></div><button className="remove" onClick={()=>removeItem(i.product.id,i.color)}>Remove</button><Link href={`/product/${i.product.slug}`}>View product ↗</Link></div></div></article>)}</div>
+ <aside className="summary-card"><span className="eyebrow">ORDER SUMMARY</span><h2>Your edit.</h2><div className="summary-row"><span>Subtotal</span><b>₹{subtotal.toLocaleString('en-IN')}</b></div><div className="summary-row"><span>Shipping</span><b>{shipping?'₹'+shipping.toLocaleString('en-IN'):'Complimentary'}</b></div><p className="shipping-note">{shipping?'Complimentary shipping unlocks at ₹2,999.':'You qualify for complimentary shipping.'}</p><div className="summary-total"><span>Total</span><strong>₹{total.toLocaleString('en-IN')}</strong></div><Link href="/checkout" className="luxury-cta full">Proceed to checkout <span>→</span></Link><div className="trust-mini"><span>◇ Secure payment</span><span>↻ 7-day returns</span><span>✦ Handloom quality</span></div></aside></section>}
+ </main>
+}
